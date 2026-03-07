@@ -34,7 +34,7 @@ export default {
       },
       fontFamily: {
         bangla: ['"Li Ador Noirrit"', '"Hind Siliguri"', 'sans-serif'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['"Li Ador Noirrit"', '"Hind Siliguri"', 'Inter', 'system-ui', 'sans-serif'],
       }
     },
   },

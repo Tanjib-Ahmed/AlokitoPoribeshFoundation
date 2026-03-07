@@ -6,7 +6,8 @@
   html {
     scroll-behavior: smooth;
   }
+
   body {
-    @apply bg-slate-50 text-gray-800 font-sans; /* Background: #F8FAFC, Text: #2E2E2E approx */
+    @apply bg-slate-50 text-gray-800 font-sans leading-relaxed;
   }
 }
