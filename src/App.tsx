@@ -8,6 +8,7 @@ import Gallery from './components/Gallery';
 import Blog from './components/Blog';
 import Contact from './components/Contact';
 import UpcomingEvents from './components/UpcomingEvents';
+import Impact from './components/Impact';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import { useState } from 'react';
@@ -90,6 +91,7 @@ function App() {
           <Navbar />
           <main>
             <Hero />
+            <Impact />
             <About />
             <Activities />
             <Gallery />

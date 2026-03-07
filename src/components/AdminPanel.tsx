@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { useCMS } from '../context/CMSContext';
 import type { Activity } from '../context/CMSContext';
-import { Settings, Image as ImageIcon, Plus, Trash2, LogOut, Info, Activity as ActivityIcon, Grid, Upload } from 'lucide-react';
+import { Settings, Image as ImageIcon, Plus, Trash2, LogOut, Info, Activity as ActivityIcon, Grid, Upload, Heart } from 'lucide-react';
 import { optimizeImage } from '../lib/imageOptimizer';
 
 const ImageUploadInput = ({
@@ -75,11 +75,12 @@ const AdminPanel = ({ onLogout }: { onLogout: () => void }) => {
         addBlogPost,
         deleteBlogPost,
         addEvent,
-        deleteEvent
+        deleteEvent,
+        updateImpactStats
     } = useCMS();
 
     // Tab State
-    const [activeTab, setActiveTab] = useState<'branding' | 'about' | 'activities' | 'gallery' | 'blogs' | 'events'>('branding');
+    const [activeTab, setActiveTab] = useState<'branding' | 'about' | 'activities' | 'impact' | 'gallery' | 'blogs' | 'events'>('branding');
 
     // New Blog form state
     const [newBlog, setNewBlog] = useState({ title: '', date: '', image: '', excerpt: '' });
@@ -143,6 +144,14 @@ const AdminPanel = ({ onLogout }: { onLogout: () => void }) => {
                     >
                         <ActivityIcon className="w-5 h-5" />
                         কার্যক্রম ম্যানেজ
+                    </button>
+
+                    <button
+                        onClick={() => setActiveTab('impact')}
+                        className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors text-left ${activeTab === 'impact' ? 'bg-brand-600 text-white font-bold' : 'text-slate-400 hover:text-white hover:bg-slate-800'}`}
+                    >
+                        <Heart className="w-5 h-5" />
+                        ইমপ্যাক্ট (Trust Stats)
                     </button>
 
                     <button
@@ -275,8 +284,78 @@ const AdminPanel = ({ onLogout }: { onLogout: () => void }) => {
                         </div>
                     )}
 
+                    {/* IMPACT TAB */}
+                    {activeTab === 'impact' && (
+                        <div className="space-y-8 animate-in fade-in">
+                            <div>
+                                <h1 className="text-3xl font-bold text-gray-900 mb-2">ইমপ্যাক্ট স্ট্যাটাস (Impact Stats)</h1>
+                                <p className="text-gray-500">ওয়েবসাইটের ট্রাস্ট সিগন্যাল বা ইমপ্যাক্ট নাম্বারগুলো পরিবর্তন করুন।</p>
+                            </div>
+
+                            <div className="space-y-6">
+                                {state.impactStats.map((stat, index) => (
+                                    <div key={stat.id} className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col gap-4">
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="text-sm font-bold text-gray-700 mb-2 block">লেবেল (বাংলা)</label>
+                                                <input
+                                                    value={stat.labelBn}
+                                                    onChange={(e) => {
+                                                        const newStats = [...state.impactStats];
+                                                        newStats[index] = { ...newStats[index], labelBn: e.target.value };
+                                                        updateImpactStats(newStats);
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl outline-none focus:border-brand-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-sm font-bold text-gray-700 mb-2 block">Label (English)</label>
+                                                <input
+                                                    value={stat.labelEn}
+                                                    onChange={(e) => {
+                                                        const newStats = [...state.impactStats];
+                                                        newStats[index] = { ...newStats[index], labelEn: e.target.value };
+                                                        updateImpactStats(newStats);
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl outline-none focus:border-brand-500"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div>
+                                                <label className="text-sm font-bold text-gray-700 mb-2 block">ভ্যালু (e.g. ৫০০+)</label>
+                                                <input
+                                                    value={stat.value}
+                                                    onChange={(e) => {
+                                                        const newStats = [...state.impactStats];
+                                                        newStats[index] = { ...newStats[index], value: e.target.value };
+                                                        updateImpactStats(newStats);
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl outline-none focus:border-brand-500"
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="text-sm font-bold text-gray-700 mb-2 block">আইকন (Leaf, Users, Heart, CheckCircle)</label>
+                                                <input
+                                                    value={stat.icon}
+                                                    onChange={(e) => {
+                                                        const newStats = [...state.impactStats];
+                                                        newStats[index] = { ...newStats[index], icon: e.target.value };
+                                                        updateImpactStats(newStats);
+                                                    }}
+                                                    className="w-full px-4 py-3 bg-slate-50 border border-gray-200 rounded-xl outline-none focus:border-brand-500"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
                     {/* GALLERY TAB */}
                     {activeTab === 'gallery' && (
+
                         <div className="space-y-8 animate-in fade-in">
                             <div>
                                 <h1 className="text-3xl font-bold text-gray-900 mb-2">গ্যালারি ম্যানেজমেন্ট (Gallery)</h1>

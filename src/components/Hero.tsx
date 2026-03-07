@@ -4,7 +4,7 @@ import { useCMS } from '../context/CMSContext';
 import { ArrowRight, HeartHandshake } from 'lucide-react';
 
 const Hero = () => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { state } = useCMS();
 
     const containerVariants = {
@@ -62,31 +62,31 @@ const Hero = () => {
 
                     <motion.h1
                         variants={itemVariants}
-                        className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
+                        className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight font-bangla"
                     >
                         {t.hero.title}
                     </motion.h1>
 
                     <motion.p
                         variants={itemVariants}
-                        className="text-lg md:text-2xl text-brand-50 mb-10 max-w-2xl font-light"
+                        className="text-xl md:text-2xl text-brand-50 mb-12 max-w-3xl font-light leading-relaxed"
                     >
                         {t.hero.description}
                     </motion.p>
 
-                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                        <a
-                            href="#about"
-                            className="inline-flex items-center justify-center gap-2 bg-white text-brand-700 px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-50 transition-colors shadow-lg hover:shadow-xl"
-                        >
-                            {t.hero.btnAbout}
-                        </a>
+                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
                         <a
                             href="#activities"
-                            className="inline-flex items-center justify-center gap-2 bg-brand-600/30 hover:bg-brand-600/50 backdrop-blur-md border border-brand-300/30 text-white px-8 py-4 rounded-full font-bold text-lg transition-colors"
+                            className="inline-flex items-center justify-center gap-2 bg-primary-500 text-white px-10 py-4 rounded-full font-bold text-lg hover:bg-primary-600 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
                         >
                             {t.hero.btnActivities}
-                            <ArrowRight className="w-5 h-5" />
+                            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                        </a>
+                        <a
+                            href="#contact"
+                            className="inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-10 py-4 rounded-full font-bold text-lg transition-all"
+                        >
+                            {language === 'bn' ? 'স্বেচ্ছাসেবক হোন' : 'Become Volunteer'}
                         </a>
                     </motion.div>
                 </motion.div>

@@ -64,7 +64,7 @@ const About = () => {
                             </span>
                         </div>
 
-                        <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 leading-tight">
+                        <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 leading-tight font-bangla">
                             {t.about.title}
                         </h2>
 
@@ -79,7 +79,7 @@ const About = () => {
                                         {feature.icon}
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-xl text-gray-900 mb-1">{feature.title}</h3>
+                                        <h3 className="font-bold text-xl text-gray-900 mb-1 font-bangla">{feature.title}</h3>
                                         <p className="text-gray-600">{feature.desc}</p>
                                     </div>
                                 </div>

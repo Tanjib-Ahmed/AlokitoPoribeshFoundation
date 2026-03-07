@@ -42,6 +42,14 @@ export interface GalleryImage {
     captionEn: string;
 }
 
+export interface ImpactStat {
+    id: string;
+    labelBn: string;
+    labelEn: string;
+    value: string;
+    icon: string;
+}
+
 interface CMSState {
     branding: Branding;
     about: AboutSection;
@@ -49,6 +57,7 @@ interface CMSState {
     gallery: GalleryImage[];
     blogPosts: BlogPost[];
     events: Event[];
+    impactStats: ImpactStat[];
 }
 
 interface CMSContextType {
@@ -65,6 +74,7 @@ interface CMSContextType {
 
     addEvent: (event: Omit<Event, 'id'>) => void;
     deleteEvent: (id: string | number) => void;
+    updateImpactStats: (stats: ImpactStat[]) => void;
     resetToDefaults: () => void;
 }
 
@@ -106,6 +116,13 @@ const defaultEvents: Event[] = [
     }
 ];
 
+const defaultImpactStats: ImpactStat[] = [
+    { id: '1', labelBn: 'রোপিত বৃক্ষ', labelEn: 'Trees Planted', value: '৫০০+', icon: 'Leaf' },
+    { id: '2', labelBn: 'স্বেচ্ছাসেবক', labelEn: 'Volunteers', value: '১২০+', icon: 'Users' },
+    { id: '3', labelBn: 'পরিবার উপকৃত', labelEn: 'Families Helped', value: '৫০+', icon: 'Heart' },
+    { id: '4', labelBn: 'প্রকল্প সম্পন্ন', labelEn: 'Projects Done', value: '১০+', icon: 'CheckCircle' },
+];
+
 // Initial State Setup
 const initialState: CMSState = {
     branding: defaultBranding,
@@ -114,6 +131,7 @@ const initialState: CMSState = {
     gallery: defaultGallery,
     blogPosts: initialBlogPosts,
     events: defaultEvents,
+    impactStats: defaultImpactStats,
 };
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
@@ -133,7 +151,8 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
                     about: { ...initialState.about, ...parsed.about },
                     // Add safe fallbacks for newly added arrays if missing
                     activities: parsed.activities || initialState.activities,
-                    gallery: parsed.gallery || initialState.gallery
+                    gallery: parsed.gallery || initialState.gallery,
+                    impactStats: parsed.impactStats || initialState.impactStats
                 };
             } catch (e) {
                 console.error("Failed to parse CMS data", e);
@@ -204,6 +223,10 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }));
     };
 
+    const updateImpactStats = (impactStats: ImpactStat[]) => {
+        setState(prev => ({ ...prev, impactStats }));
+    };
+
     const resetToDefaults = () => {
         setState(initialState);
     };
@@ -220,6 +243,7 @@ export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             deleteBlogPost,
             addEvent,
             deleteEvent,
+            updateImpactStats,
             resetToDefaults
         }}>
             {children}
