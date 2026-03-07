@@ -5,18 +5,22 @@ import * as LucideIcons from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
 
 const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) => {
+    const { language } = useLanguage();
     const [count, setCount] = useState(0);
-    const target = parseInt(value.replace(/\D/g, '')) || 0;
-    const suffix = value.replace(/[0-9]/g, '');
     const countRef = useRef<HTMLSpanElement>(null);
     const [isVisible, setIsVisible] = useState(false);
+
+    // Helpers for digit conversion
+    const bnToEn = (str: string) => str.replace(/[০-৯]/g, d => "০১২৩৪৫৬৭৮৯".indexOf(d).toString());
+    const enToBn = (num: number | string) => num.toString().replace(/[0-9]/g, d => "০১২৩৪৫৬৭৮৯"[parseInt(d)]);
+
+    const target = parseInt(bnToEn(value).replace(/\D/g, '')) || 0;
+    const suffix = value.replace(/[০-৯0-9]/g, '');
 
     useEffect(() => {
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) {
-                    setIsVisible(true);
-                }
+                if (entry.isIntersecting) setIsVisible(true);
             },
             { threshold: 0.1 }
         );
@@ -26,21 +30,30 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
     }, []);
 
     useEffect(() => {
-        if (!isVisible) return;
+        if (!isVisible || target <= 0) return;
 
-        let start = 0;
-        const end = target;
-        const stepTime = Math.abs(Math.floor(duration * 1000 / end));
-        const timer = setInterval(() => {
-            start += 1;
-            setCount(start);
-            if (start === end) clearInterval(timer);
-        }, stepTime);
+        let startTime: number | null = null;
+        let animationFrame: number;
 
-        return () => clearInterval(timer);
+        const animate = (timestamp: number) => {
+            if (!startTime) startTime = timestamp;
+            const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+            const currentCount = Math.floor(progress * target);
+
+            setCount(currentCount);
+
+            if (progress < 1) {
+                animationFrame = requestAnimationFrame(animate);
+            }
+        };
+
+        animationFrame = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(animationFrame);
     }, [isVisible, target, duration]);
 
-    return <span ref={countRef}>{count}{suffix}</span>;
+    const displayCount = language === 'bn' ? enToBn(count) : count;
+
+    return <span ref={countRef}>{displayCount}{suffix}</span>;
 };
 
 const Impact = () => {
