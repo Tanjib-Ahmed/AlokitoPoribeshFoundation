@@ -8,36 +8,41 @@ export default {
     extend: {
       colors: {
         primary: {
-          50: '#f0f9ff',
-          100: '#e0f2fe',
-          200: '#bae6fd',
-          300: '#7dd3fc',
-          400: '#38bdf8',
-          500: '#2F6FA3', // Professional NGO Blue
-          600: '#0284c7',
-          700: '#1F4E79', // Accent/Deep Blue
-          800: '#075985',
-          900: '#0c4a6e',
+          DEFAULT: '#1F7A3E',
+          dark: '#165B2D',
+          light: '#2E9D52',
         },
-        secondary: '#7FB5DA',
-        accent: '#1F4E79',
-        background: '#F8FAFC',
+        secondary: {
+          DEFAULT: '#4CAF50',
+          light: '#81C784',
+        },
+        accent: {
+          DEFAULT: '#F5C542',
+          hover: '#E5B532',
+        },
+        background: '#F8FAF8',
+        dark: '#1A1A1A',
         brand: {
-          50: "#E9F2F8",
-          100: "#D0E4F1",
-          200: "#A8CCE4",
-          300: "#7FB5DA",
-          400: "#5A9FCC",
-          500: "#3F8BC4",
-          600: "#2F6FA3",
-          700: "#1F4E79",
-          800: "#173D5A",
-          900: "#0F2A3F"
+          50: '#f0f7f1',
+          100: '#dceee0',
+          200: '#bbddc4',
+          300: '#8dc29e',
+          400: '#5ca274',
+          500: '#1F7A3E',
+          600: '#327c4d',
+          700: '#28633e',
+          800: '#214f33',
+          900: '#1c422c',
+          950: '#0f2518',
         }
       },
       fontFamily: {
-        bangla: ['"Li Ador Noirrit"', '"Hind Siliguri"', 'sans-serif'],
-        sans: ['"Li Ador Noirrit"', '"Hind Siliguri"', 'Inter', 'system-ui', 'sans-serif'],
+        bangla: ['"Li Ador Noirrit"', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+      container: {
+        center: true,
+        padding: '2rem',
       }
     },
   },

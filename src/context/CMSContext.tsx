@@ -1,45 +1,40 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { blogPosts as initialBlogPosts } from '../data/blogPosts';
 
-// Define Data Types
+// Types for the Nature-Themed NGO Site
 export interface BlogPost {
-    id: number | string;
+    id: string;
     title: string;
     date: string;
-    image: string;
+    cover: string;
     excerpt: string;
+    body: string;
 }
 
-export interface Event {
-    id: number | string;
-    title: string;
-    date: string;
-    time: string;
-    location: string;
-    description: string;
+export interface GalleryItem {
+    id: string;
+    image: string;
+    captionBn: string;
+    captionEn: string;
 }
 
-export interface Branding {
-    logoUrlBn: string;
-    logoUrlEn: string;
-    heroImageUrl: string;
-}
-
-export interface AboutSection {
-    imageUrl: string;
+export interface AboutContent {
+    titleBn: string;
+    titleEn: string;
+    descriptionBn: string;
+    descriptionEn: string;
+    missionBn: string;
+    missionEn: string;
+    visionBn: string;
+    visionEn: string;
 }
 
 export interface Activity {
     id: string;
-    icon: string; // Storing icon name for Lucide or static class
-    colorClass: string;
-}
-
-export interface GalleryImage {
-    id: number | string;
-    src: string;
-    captionBn: string;
-    captionEn: string;
+    icon: string;
+    titleBn: string;
+    titleEn: string;
+    descriptionBn: string;
+    descriptionEn: string;
 }
 
 export interface ImpactStat {
@@ -50,202 +45,139 @@ export interface ImpactStat {
     icon: string;
 }
 
-interface CMSState {
-    branding: Branding;
-    about: AboutSection;
+export interface CMSState {
+    branding: {
+        nameBn: string;
+        nameEn: string;
+        taglineBn: string;
+        taglineEn: string;
+        logo: string;
+    };
+    about: AboutContent;
     activities: Activity[];
-    gallery: GalleryImage[];
+    gallery: GalleryItem[];
     blogPosts: BlogPost[];
-    events: Event[];
     impactStats: ImpactStat[];
+    contact: {
+        phone: string;
+        email: string;
+        address: string;
+        facebookUrl: string;
+    };
 }
 
 interface CMSContextType {
     state: CMSState;
-    updateBranding: (branding: Partial<Branding>) => void;
-    updateAbout: (about: Partial<AboutSection>) => void;
-    updateActivities: (activities: Activity[]) => void;
-
-    addGalleryImage: (image: Omit<GalleryImage, 'id'>) => void;
-    deleteGalleryImage: (id: string | number) => void;
-
-    addBlogPost: (post: Omit<BlogPost, 'id'>) => void;
-    deleteBlogPost: (id: string | number) => void;
-
-    addEvent: (event: Omit<Event, 'id'>) => void;
-    deleteEvent: (id: string | number) => void;
-    updateImpactStats: (stats: ImpactStat[]) => void;
-    resetToDefaults: () => void;
+    updateState: (newState: Partial<CMSState>) => void;
 }
 
-const defaultBranding: Branding = {
-    logoUrlBn: '',
-    logoUrlEn: '',
-    heroImageUrl: 'linear-gradient(135deg, #1F4E79 0%, #3F8BC4 50%, #7FB5DA 100%)',
-};
-
-const defaultAbout: AboutSection = {
-    imageUrl: 'https://images.unsplash.com/photo-1594708767771-a7502209ff51?q=80&w=2070&auto=format&fit=crop'
-};
-
-const defaultActivities: Activity[] = [
-    { id: 'tree', icon: 'Leaf', colorClass: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
-    { id: 'cleaning', icon: 'Trash2', colorClass: 'bg-blue-50 text-blue-600 border-blue-100' },
-    { id: 'winter', icon: 'Snowflake', colorClass: 'bg-cyan-50 text-cyan-600 border-cyan-100' },
-    { id: 'helping', icon: 'HandHeart', colorClass: 'bg-rose-50 text-rose-600 border-rose-100' },
-    { id: 'education', icon: 'BookOpen', colorClass: 'bg-amber-50 text-amber-600 border-amber-100' },
-];
-
-const defaultGallery: GalleryImage[] = [
-    { id: 1, src: 'https://images.unsplash.com/photo-1594708767771-a7502209ff51?w=800&auto=format&fit=crop', captionBn: 'শীতবস্ত্র বিতরণ', captionEn: 'Winter Clothes Distribution' },
-    { id: 2, src: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&auto=format&fit=crop', captionBn: 'বৃক্ষরোপণ কর্মসূচি', captionEn: 'Tree Plantation' },
-    { id: 3, src: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&auto=format&fit=crop', captionBn: 'অসহায় মানুষের সহায়তা', captionEn: 'Helping the Poor' },
-    { id: 4, src: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=800&auto=format&fit=crop', captionBn: 'পরিচ্ছন্নতা অভিযান', captionEn: 'Cleanliness Drive' },
-    { id: 5, src: 'https://images.unsplash.com/photo-1518398046578-8cca57782e17?w=800&auto=format&fit=crop', captionBn: 'শিক্ষামূলক কার্যক্রম', captionEn: 'Educational Programs' },
-    { id: 6, src: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?w=800&auto=format&fit=crop', captionBn: 'সচেতনতা বৃদ্ধি', captionEn: 'Awareness Campaigns' },
-];
-
-const defaultEvents: Event[] = [
-    {
-        id: 1,
-        title: 'বিশ্ব পরিবেশ দিবস উদযাপন ২০২৬',
-        date: '05 June 2026',
-        time: '10:00 AM',
-        location: 'জাতীয় সংসদ ভবন এলাকা, ঢাকা',
-        description: 'পরিবেশ রক্ষায় সচেতনতা বাড়াতে আমাদের বিশেষ র্যালি ও বৃক্ষরোপণ কর্মসূচি।'
+const defaultState: CMSState = {
+    branding: {
+        nameBn: "আলোকিত পরিবেশ ফাউন্ডেশন",
+        nameEn: "Alokito Poribesh Foundation",
+        taglineBn: "একটি সবুজ, পরিচ্ছন্ন ও মানবিক সমাজ গড়ার লক্ষ্যে",
+        taglineEn: "Building a green, clean and humane society together",
+        logo: "Leaf"
+    },
+    about: {
+        titleBn: "আলোকিত পরিবেশ ফাউন্ডেশন সম্পর্কে",
+        titleEn: "About Us",
+        descriptionBn: "আমরা আলোকিত পরিবেশ ফাউন্ডেশন একটি অরাজনৈতিক, সেবামূলক ও জনকল্যাণমুখী প্রতিষ্ঠান। একটি সবুজ, পরিচ্ছন্ন ও মানবিক সমাজ গড়ার লক্ষ্যে আমাদের নিরন্তর পথচলা।",
+        descriptionEn: "We are Alokito Poribesh Foundation, a non-political, service-oriented, and public welfare institution. Our continuous journey aims towards building a green, clean, and humane society.",
+        missionBn: "পরিবেশ রক্ষা এবং জলবায়ু পরিবর্তনের প্রভাব মোকাবেলায় সচেতনতা বৃদ্ধি এবং বৃক্ষরোপণ কর্মসূচি পালন করা।",
+        missionEn: "Raising awareness and conducting tree plantation programs to protect the environment and combat climate change impacts.",
+        visionBn: "একটি বাসযোগ্য এবং ভারসাম্যপূর্ণ প্রাকৃতিক পরিবেশ সম্বলিত বাংলাদেশ গড়ে তোলা।",
+        visionEn: "Building a Bangladesh with a livable and balanced natural environment."
+    },
+    activities: [
+        {
+            id: '1',
+            icon: 'Leaf',
+            titleBn: 'বৃক্ষরোপণ কর্মসূচি',
+            titleEn: 'Tree Plantation',
+            descriptionBn: 'পরিবেশের ভারসাম্য রক্ষায় আমরা নিয়মিত বৃক্ষরোপণ অভিযান পরিচালনা করি।',
+            descriptionEn: 'We regularly conduct tree plantation drives to maintain environmental balance.'
+        },
+        {
+            id: '2',
+            icon: 'Trash2',
+            titleBn: 'পরিচ্ছন্নতা অভিযান',
+            titleEn: 'Environment Cleaning',
+            descriptionBn: 'শহর ও গ্রামকে পরিচ্ছন্ন রাখতে আমরা বিভিন্ন পরিচ্ছন্নতা কার্যক্রম চালাই।',
+            descriptionEn: 'We run various cleaning activities to keep cities and villages clean.'
+        },
+        {
+            id: '3',
+            icon: 'Shirt',
+            titleBn: 'শীতবস্ত্র বিতরণ',
+            titleEn: 'Winter Clothes Distribution',
+            descriptionBn: 'অসহায় মানুষের মাঝে আমরা প্রতি বছর শীতবস্ত্র বিতরণ করি।',
+            descriptionEn: 'Every year we distribute winter clothes among helpless people.'
+        },
+        {
+            id: '4',
+            icon: 'BookOpen',
+            titleBn: 'সচেতনামূলক কার্যক্রম',
+            titleEn: 'Awareness Programs',
+            descriptionBn: 'পরিবেশ রক্ষায় সাধারণ মানুষের মাঝে সচেতনতা তৈরিতে আমরা কাজ করি।',
+            descriptionEn: 'We work to create awareness among common people to protect environment.'
+        },
+    ],
+    gallery: [
+        { id: '1', image: 'https://images.unsplash.com/photo-1594708767771-a7502209ff51?w=800&fit=crop', captionBn: 'শীতবস্ত্র বিতরণ', captionEn: 'Winter Clothes Distribution' },
+        { id: '2', image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&fit=crop', captionBn: 'বৃক্ষরোপণ কর্মসূচি', captionEn: 'Tree Plantation' },
+        { id: '3', image: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=800&fit=crop', captionBn: 'অসহায় মানুষের সহায়তা', captionEn: 'Helping the Poor' },
+    ],
+    blogPosts: [
+        {
+            id: '1',
+            title: 'আমাদের বৃক্ষরোপণ অভিযান ২০২৬',
+            date: '2026-03-20',
+            cover: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1600&fit=crop',
+            excerpt: 'সম্প্রতি আমরা মিরপুর এলাকায় ৫০০১টির বেশি বৃক্ষরোপণ করেছি। আমাদের এই উদ্যোগের বিস্তারিত জানুন এই ব্লগে।',
+            body: 'পরিবেশ রক্ষায় আমাদের এই উদ্যোগের বিস্তারিত...'
+        }
+    ],
+    impactStats: [
+        { id: '1', labelBn: 'রোপিত বৃক্ষ', labelEn: 'Trees Planted', value: '৫০০১+', icon: 'Leaf' },
+        { id: '2', labelBn: 'স্বেচ্ছাসেবক', labelEn: 'Volunteers', value: '১২০+', icon: 'Users' },
+        { id: '3', labelBn: 'পরিবার উপকৃত', labelEn: 'Families Helped', value: '২৫০+', icon: 'Heart' },
+        { id: '4', labelBn: 'প্রকল্প সম্পন্ন', labelEn: 'Projects Done', value: '১৫+', icon: 'CheckCircle' },
+    ],
+    contact: {
+        phone: "+৮৮০ ১৭১২-৩৪৫৬৭৮",
+        email: "info@alokitoporibesh.org",
+        address: "মিরপুর ১, ঢাকা ১২১৬, বাংলাদেশ",
+        facebookUrl: "https://facebook.com/alokitoporibesh"
     }
-];
-
-const defaultImpactStats: ImpactStat[] = [
-    { id: '1', labelBn: 'রোপিত বৃক্ষ', labelEn: 'Trees Planted', value: '৫০০+', icon: 'Leaf' },
-    { id: '2', labelBn: 'স্বেচ্ছাসেবক', labelEn: 'Volunteers', value: '১২০+', icon: 'Users' },
-    { id: '3', labelBn: 'পরিবার উপকৃত', labelEn: 'Families Helped', value: '৫০+', icon: 'Heart' },
-    { id: '4', labelBn: 'প্রকল্প সম্পন্ন', labelEn: 'Projects Done', value: '১০+', icon: 'CheckCircle' },
-];
-
-// Initial State Setup
-const initialState: CMSState = {
-    branding: defaultBranding,
-    about: defaultAbout,
-    activities: defaultActivities,
-    gallery: defaultGallery,
-    blogPosts: initialBlogPosts,
-    events: defaultEvents,
-    impactStats: defaultImpactStats,
 };
 
 const CMSContext = createContext<CMSContextType | undefined>(undefined);
 
 export const CMSProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [state, setState] = useState<CMSState>(() => {
-        // Load from Local Storage if available
-        const saved = localStorage.getItem('alokito_cms_data');
+        const saved = localStorage.getItem('alokito_cms_data_nature');
         if (saved) {
             try {
-                // Merge with defaults to ensure missing properties fallback properly in older caches
                 const parsed = JSON.parse(saved);
-                return {
-                    ...initialState,
-                    ...parsed,
-                    branding: { ...initialState.branding, ...parsed.branding },
-                    about: { ...initialState.about, ...parsed.about },
-                    // Add safe fallbacks for newly added arrays if missing
-                    activities: parsed.activities || initialState.activities,
-                    gallery: parsed.gallery || initialState.gallery,
-                    impactStats: parsed.impactStats || initialState.impactStats
-                };
+                return { ...defaultState, ...parsed };
             } catch (e) {
-                console.error("Failed to parse CMS data", e);
+                return defaultState;
             }
         }
-        return initialState;
+        return defaultState;
     });
 
-    // Save to Local Storage whenever state changes
     useEffect(() => {
-        localStorage.setItem('alokito_cms_data', JSON.stringify(state));
+        localStorage.setItem('alokito_cms_data_nature', JSON.stringify(state));
     }, [state]);
 
-    const updateBranding = (updates: Partial<Branding>) => {
-        setState(prev => ({
-            ...prev,
-            branding: { ...prev.branding, ...updates }
-        }));
-    };
-
-    const updateAbout = (updates: Partial<AboutSection>) => {
-        setState(prev => ({
-            ...prev,
-            about: { ...prev.about, ...updates }
-        }));
-    };
-
-    const updateActivities = (activities: Activity[]) => {
-        setState(prev => ({ ...prev, activities }));
-    };
-
-    const addGalleryImage = (image: Omit<GalleryImage, 'id'>) => {
-        const newImg = { ...image, id: Date.now() };
-        setState(prev => ({ ...prev, gallery: [newImg, ...prev.gallery] }));
-    };
-
-    const deleteGalleryImage = (id: string | number) => {
-        setState(prev => ({ ...prev, gallery: prev.gallery.filter(g => g.id !== id) }));
-    };
-
-    const addBlogPost = (post: Omit<BlogPost, 'id'>) => {
-        const newPost = { ...post, id: Date.now() };
-        setState(prev => ({
-            ...prev,
-            blogPosts: [newPost, ...prev.blogPosts]
-        }));
-    };
-
-    const deleteBlogPost = (id: string | number) => {
-        setState(prev => ({
-            ...prev,
-            blogPosts: prev.blogPosts.filter(p => p.id !== id)
-        }));
-    };
-
-    const addEvent = (event: Omit<Event, 'id'>) => {
-        const newEvent = { ...event, id: Date.now() };
-        setState(prev => ({
-            ...prev,
-            events: [newEvent, ...prev.events]
-        }));
-    };
-
-    const deleteEvent = (id: string | number) => {
-        setState(prev => ({
-            ...prev,
-            events: prev.events.filter(e => e.id !== id)
-        }));
-    };
-
-    const updateImpactStats = (impactStats: ImpactStat[]) => {
-        setState(prev => ({ ...prev, impactStats }));
-    };
-
-    const resetToDefaults = () => {
-        setState(initialState);
+    const updateState = (newState: Partial<CMSState>) => {
+        setState(prev => ({ ...prev, ...newState }));
     };
 
     return (
-        <CMSContext.Provider value={{
-            state,
-            updateBranding,
-            updateAbout,
-            updateActivities,
-            addGalleryImage,
-            deleteGalleryImage,
-            addBlogPost,
-            deleteBlogPost,
-            addEvent,
-            deleteEvent,
-            updateImpactStats,
-            resetToDefaults
-        }}>
+        <CMSContext.Provider value={{ state, updateState }}>
             {children}
         </CMSContext.Provider>
     );

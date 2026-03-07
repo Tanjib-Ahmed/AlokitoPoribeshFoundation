@@ -61,29 +61,26 @@ const Impact = () => {
     const { state } = useCMS();
 
     return (
-        <section className="py-24 bg-primary-900 relative overflow-hidden">
+        <section id="impact" className="py-24 bg-primary-950 relative overflow-hidden">
             {/* Background Decoration */}
             <div className="absolute inset-0 opacity-10">
                 <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-400 rounded-full blur-3xl" />
             </div>
 
-            <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
-                <div className="text-center mb-16">
+            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
+                <div className="text-center mb-16 px-4">
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-secondary text-sm font-bold uppercase tracking-widest mb-4"
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-secondary text-xs font-black uppercase tracking-[0.3em] mb-4"
                     >
                         {language === 'bn' ? 'আমাদের অর্জন' : 'Our Impact'}
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-4xl md:text-5xl font-bold text-white font-bangla"
+                        className="text-4xl md:text-5xl font-black text-white font-bangla leading-tight"
                     >
                         {language === 'bn' ? 'আলোকিত আগামীর লক্ষ্যে আমাদের পথচলা' : 'Driving Change for a Brighter Future'}
                     </motion.h2>
@@ -101,10 +98,10 @@ const Impact = () => {
                                 transition={{ delay: idx * 0.1 }}
                                 className="group relative p-8 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-500 hover:-translate-y-2"
                             >
-                                <div className="mb-6 w-16 h-16 rounded-2xl bg-primary-500/20 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500">
+                                <div className="mb-6 w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500">
                                     <IconComponent className="w-8 h-8" />
                                 </div>
-                                <div className="text-4xl font-bold text-white mb-2 font-sans">
+                                <div className="text-4xl font-black text-white mb-2 font-sans tracking-tight">
                                     <CountUp value={stat.value} />
                                 </div>
                                 <div className="text-lg text-white/60 font-medium font-bangla">
@@ -112,7 +109,7 @@ const Impact = () => {
                                 </div>
 
                                 {/* Hover Gradient Effect */}
-                                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-secondary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                             </motion.div>
                         );
                     })}

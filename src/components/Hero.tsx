@@ -1,109 +1,97 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { useCMS } from '../context/CMSContext';
-import { ArrowRight, HeartHandshake } from 'lucide-react';
+import { ArrowRight, Leaf, Users } from 'lucide-react';
 
 const Hero = () => {
-    const { t, language } = useLanguage();
-    const { state } = useCMS();
-
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.3,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.8 },
-        },
-    };
+    const { language } = useLanguage();
 
     return (
-        <section
-            id="home"
-            className="relative min-h-screen flex items-center justify-center overflow-hidden bg-primary-900 text-white"
-        >
-            {/* Background Image with High-End Gradient */}
-            <div
-                className="absolute inset-0 z-0 bg-cover bg-center transition-transform duration-1000 scale-105"
-                style={{
-                    backgroundImage: state.branding.heroImageUrl.includes('url')
-                        ? state.branding.heroImageUrl
-                        : `url('${state.branding.heroImageUrl}')`
-                }}
-            />
-            {/* Premium Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-primary-900/80 via-primary-900/40 to-primary-900/90 z-0" />
+        <section id="home" className="relative min-h-screen flex items-center overflow-hidden bg-dark">
+            {/* Immersive Background Overlay */}
+            <div className="absolute inset-0">
+                <img
+                    src="https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=1600&auto=format&fit=crop"
+                    alt="Nature background"
+                    className="w-full h-full object-cover opacity-40 scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-dark via-dark/80 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+            </div>
 
-            <div className="max-w-6xl relative z-10 mx-auto px-4 md:px-6 pt-20 flex flex-col items-center text-center">
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                    className="max-w-4xl mx-auto flex flex-col items-center"
-                >
-                    <motion.div variants={itemVariants} className="mb-8 inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-xl">
-                        <HeartHandshake className="w-5 h-5 text-secondary" />
-                        <span className="text-sm md:text-base font-bold tracking-wide uppercase text-white/90">
-                            {t.hero.subtitle}
+            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10 w-full pt-20">
+                <div className="max-w-3xl">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center gap-3 mb-8 px-4 py-2 bg-primary/20 backdrop-blur-md rounded-full border border-primary/30 w-fit"
+                    >
+                        <Leaf className="text-secondary w-5 h-5" />
+                        <span className="text-secondary font-bold text-xs md:text-sm uppercase tracking-widest">
+                            {language === 'bn' ? 'একটি পরিবেশবান্ধব উদ্যোগ' : 'Eco-conscious Foundation'}
                         </span>
                     </motion.div>
 
                     <motion.h1
-                        variants={itemVariants}
-                        className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-[1.1] font-bangla tracking-tight"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-7xl font-bold text-white mb-8 leading-[1.15] font-bangla"
                     >
-                        {t.hero.title}
+                        {language === 'bn'
+                            ? 'একটি সবুজ, পরিচ্ছন্ন ও মানবিক সমাজ গড়ার লক্ষ্যে'
+                            : 'Building a green, clean and humane society together'}
                     </motion.h1>
 
                     <motion.p
-                        variants={itemVariants}
-                        className="text-xl md:text-3xl text-white/80 mb-12 max-w-3xl font-light leading-relaxed font-sans"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="text-lg md:text-2xl text-white/70 mb-12 leading-relaxed max-w-2xl font-light"
                     >
-                        {t.hero.description}
+                        {language === 'bn'
+                            ? 'প্রকৃতিকে বাঁচিয়ে রেখেই আমরা গড়ব আগামীর সুন্দর পৃথিবী। আলোকিত পরিবেশ ফাউন্ডেশন সবসময় আপনার পাশে আছে।'
+                            : 'Protecting nature is the only way to ensure a beautiful future. Alokito Poribesh Foundation is always by your side.'}
                     </motion.p>
 
-                    <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 w-full sm:w-auto">
-                        <a
-                            href="#activities"
-                            className="inline-flex items-center justify-center gap-3 bg-primary-500 text-white px-10 py-5 rounded-2xl font-bold text-xl hover:bg-primary-600 transition-all shadow-2xl hover:shadow-primary-500/40 hover:-translate-y-1 group"
-                        >
-                            {t.hero.btnActivities}
-                            <ArrowRight className="w-6 h-6 transition-transform group-hover:translate-x-1" />
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 }}
+                        className="flex flex-col sm:flex-row gap-5"
+                    >
+                        <a href="#about" className="btn-primary group">
+                            {language === 'bn' ? 'আরও জানুন' : 'Learn More'}
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </a>
-                        <a
-                            href="#contact"
-                            className="inline-flex items-center justify-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-xl border border-white/30 text-white px-10 py-5 rounded-2xl font-bold text-xl transition-all shadow-xl hover:-translate-y-1"
-                        >
-                            {language === 'bn' ? 'স্বেচ্ছাসেবক হোন' : 'Become Volunteer'}
+                        <a href="#volunteer" className="btn-secondary group">
+                            {language === 'bn' ? 'আমাদের সঙ্গে যোগ দিন' : 'Join Us'}
+                            <Users className="w-5 h-5 group-hover:scale-110 transition-transform" />
                         </a>
                     </motion.div>
-                </motion.div>
+                </div>
             </div>
 
-            {/* Premium Scroll Indicator */}
+            {/* Scroll Indicator */}
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 2, duration: 1 }}
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3"
+                transition={{ delay: 1, duration: 1 }}
+                className="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:block"
             >
-                <div className="w-[1px] h-16 bg-gradient-to-b from-transparent via-white/50 to-white overflow-hidden">
+                <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-2">
                     <motion.div
-                        animate={{ y: [0, 64, 0] }}
-                        transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
-                        className="w-full h-1/2 bg-white"
+                        animate={{ y: [0, 12, 0] }}
+                        transition={{ repeat: Infinity, duration: 2 }}
+                        className="w-1.5 h-1.5 bg-secondary rounded-full"
                     />
                 </div>
             </motion.div>
+
+            {/* Decorative Element */}
+            <div className="absolute right-0 bottom-0 w-1/3 h-full pointer-events-none hidden lg:block">
+                <div className="absolute top-1/4 right-0 w-96 h-96 bg-primary/10 rounded-full blur-[120px]" />
+                <div className="absolute bottom-1/4 right-20 w-64 h-64 bg-secondary/10 rounded-full blur-[100px]" />
+            </div>
         </section>
     );
 };
