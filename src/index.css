@@ -8,6 +8,6 @@
   }
 
   body {
-    @apply bg-slate-50 text-gray-800 font-sans leading-relaxed;
+    @apply bg-background text-gray-800 font-sans leading-relaxed transition-colors duration-300;
   }
 }

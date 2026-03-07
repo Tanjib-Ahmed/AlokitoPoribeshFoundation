@@ -1,81 +1,109 @@
+import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { useCMS } from '../context/CMSContext';
-import { motion } from 'framer-motion';
-import { Leaf, Users, Heart, CheckCircle } from 'lucide-react';
+import * as LucideIcons from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
 
-const iconMap: Record<string, any> = {
-    Leaf,
-    Users,
-    Heart,
-    CheckCircle,
+const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) => {
+    const [count, setCount] = useState(0);
+    const target = parseInt(value.replace(/\D/g, '')) || 0;
+    const suffix = value.replace(/[0-9]/g, '');
+    const countRef = useRef<HTMLSpanElement>(null);
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setIsVisible(true);
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        if (countRef.current) observer.observe(countRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    useEffect(() => {
+        if (!isVisible) return;
+
+        let start = 0;
+        const end = target;
+        const stepTime = Math.abs(Math.floor(duration * 1000 / end));
+        const timer = setInterval(() => {
+            start += 1;
+            setCount(start);
+            if (start === end) clearInterval(timer);
+        }, stepTime);
+
+        return () => clearInterval(timer);
+    }, [isVisible, target, duration]);
+
+    return <span ref={countRef}>{count}{suffix}</span>;
 };
 
 const Impact = () => {
     const { language } = useLanguage();
     const { state } = useCMS();
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { y: 20, opacity: 0 },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: { duration: 0.5 }
-        }
-    };
-
     return (
-        <section className="py-20 bg-primary-50">
-            <div className="container mx-auto px-4 md:px-6 text-center">
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="mb-16"
-                >
-                    <h2 className="text-3xl md:text-4xl font-bold font-bangla text-primary-800 mb-4">
-                        {language === 'bn' ? 'এক নজরে আমাদের প্রভাব' : 'Our Impact at a Glance'}
-                    </h2>
-                    <div className="w-20 h-1.5 bg-primary-500 mx-auto rounded-full"></div>
-                </motion.div>
+        <section className="py-24 bg-primary-900 relative overflow-hidden">
+            {/* Background Decoration */}
+            <div className="absolute inset-0 opacity-10">
+                <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-400 rounded-full blur-3xl" />
+            </div>
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true }}
-                    className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
-                >
-                    {state.impactStats.map((stat) => {
-                        const Icon = iconMap[stat.icon] || Leaf;
+            <div className="max-w-6xl mx-auto px-4 md:px-6 relative z-10">
+                <div className="text-center mb-16">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-block px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-secondary text-sm font-bold uppercase tracking-widest mb-4"
+                    >
+                        {language === 'bn' ? 'আমাদের অর্জন' : 'Our Impact'}
+                    </motion.div>
+                    <motion.h2
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-bold text-white font-bangla"
+                    >
+                        {language === 'bn' ? 'আলোকিত আগামীর লক্ষ্যে আমাদের পথচলা' : 'Driving Change for a Brighter Future'}
+                    </motion.h2>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {state.impactStats.map((stat, idx) => {
+                        const IconComponent = (LucideIcons as any)[stat.icon] || LucideIcons.Zap;
                         return (
                             <motion.div
                                 key={stat.id}
-                                variants={itemVariants}
-                                className="flex flex-col items-center"
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: idx * 0.1 }}
+                                className="group relative p-8 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-500 hover:-translate-y-2"
                             >
-                                <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-primary-600 mb-4 transition-transform hover:scale-110 duration-300">
-                                    <Icon className="w-8 h-8" />
+                                <div className="mb-6 w-16 h-16 rounded-2xl bg-primary-500/20 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500">
+                                    <IconComponent className="w-8 h-8" />
                                 </div>
-                                <span className="text-3xl md:text-4xl font-bold text-primary-900 mb-2 font-sans">
-                                    {stat.value}
-                                </span>
-                                <span className="text-sm md:text-base font-medium text-primary-700 font-bangla">
+                                <div className="text-4xl font-bold text-white mb-2 font-sans">
+                                    <CountUp value={stat.value} />
+                                </div>
+                                <div className="text-lg text-white/60 font-medium font-bangla">
                                     {language === 'bn' ? stat.labelBn : stat.labelEn}
-                                </span>
+                                </div>
+
+                                {/* Hover Gradient Effect */}
+                                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-secondary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                             </motion.div>
                         );
                     })}
-                </motion.div>
+                </div>
             </div>
         </section>
     );

@@ -4,10 +4,10 @@ import { useCMS } from '../context/CMSContext';
 import * as LucideIcons from 'lucide-react';
 
 const Activities = () => {
-    const { t } = useLanguage();
+    const { t, language } = useLanguage();
     const { state } = useCMS();
 
-    // Helper array to keep the text localized while fetching icons/colors from CMS
+    // Helper array for localization
     const activitiesData = [
         { title: t.activities.treePlantation, delay: 0.1 },
         { title: t.activities.cleaning, delay: 0.2 },
@@ -16,56 +16,68 @@ const Activities = () => {
         { title: t.activities.education, delay: 0.5 },
     ];
 
-    // Merge localized text with dynamic CMS properties
     const activities = state.activities.map((act, index) => {
         const IconComponent = (LucideIcons as any)[act.icon] || LucideIcons.Leaf;
         return {
             ...act,
             title: activitiesData[index]?.title || act.id,
             delay: activitiesData[index]?.delay || 0,
-            icon: <IconComponent className="w-8 h-8" />
+            icon: <IconComponent className="w-10 h-10" />
         };
     });
 
     return (
-        <section id="activities" className="py-20 md:py-32 bg-slate-50 relative">
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center justify-center gap-2 mb-4">
-                        <span className="w-8 h-1 bg-brand-500 rounded-full" />
-                        <span className="text-brand-600 font-bold uppercase tracking-wider text-sm">
-                            What We Do
+        <section id="activities" className="py-24 bg-background relative">
+            <div className="max-w-6xl mx-auto px-4 md:px-6">
+                <div className="text-center mb-20">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        className="inline-flex items-center justify-center gap-3 mb-4"
+                    >
+                        <span className="w-12 h-1 bg-primary-500 rounded-full" />
+                        <span className="text-primary-600 font-bold uppercase tracking-widest text-sm">
+                            {language === 'bn' ? 'আমরা যা করি' : 'What We Do'}
                         </span>
-                        <span className="w-8 h-1 bg-brand-500 rounded-full" />
-                    </div>
+                        <span className="w-12 h-1 bg-primary-500 rounded-full" />
+                    </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-3xl md:text-5xl font-bold text-gray-900 font-bangla"
+                        transition={{ delay: 0.1 }}
+                        className="text-4xl md:text-5xl font-bold text-gray-900 font-bangla"
                     >
                         {t.activities.title}
                     </motion.h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {activities.map((activity) => (
                         <motion.div
                             key={activity.id}
                             initial={{ opacity: 0, y: 30 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-50px" }}
-                            transition={{ delay: activity.delay, duration: 0.5 }}
-                            whileHover={{ y: -5, scale: 1.02 }}
-                            className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-xl border border-gray-100 transition-all duration-300"
+                            viewport={{ once: true }}
+                            transition={{ delay: activity.delay, duration: 0.6 }}
+                            whileHover={{ y: -10 }}
+                            className="group bg-white rounded-[2.5rem] p-10 shadow-sm hover:shadow-2xl border border-gray-100 transition-all duration-500"
                         >
-                            <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-6 border ${activity.colorClass}`}>
+                            <div className="w-20 h-20 rounded-2xl bg-primary-50 flex items-center justify-center mb-8 border border-primary-100 text-primary-600 group-hover:bg-primary-500 group-hover:text-white group-hover:rotate-6 transition-all duration-500">
                                 {activity.icon}
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{activity.title}</h3>
-                            <p className="text-gray-500 leading-relaxed font-light">
-                                আমরা আন্তরিকতার সাথে এই কার্যক্রম পরিচালনা করে আসছি, যাতে সমাজের মানুষের উপকার হয়।
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4 font-bangla">{activity.title}</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                {language === 'bn'
+                                    ? 'আমরা আন্তরিকতার সাথে এই কার্যক্রম পরিচালনা করে আসছি, যাতে সমাজের মানুষের উপকার হয়।'
+                                    : 'We are conducting these activities with sincerity to benefit the people of the society.'}
                             </p>
+
+                            <div className="mt-8 flex items-center gap-2 text-primary-600 font-bold text-sm uppercase tracking-wider group-hover:gap-4 transition-all">
+                                {language === 'bn' ? 'বিস্তারিত দেখুন' : 'Learn More'}
+                                <LucideIcons.ArrowRight className="w-4 h-4" />
+                            </div>
                         </motion.div>
                     ))}
                 </div>
