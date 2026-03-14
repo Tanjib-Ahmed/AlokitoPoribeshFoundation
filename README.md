@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# Alokito Poribesh Foundation Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a premium, high-performance website for the Alokito Poribesh Foundation, redesigned with a "Carex-inspired" aesthetic. It features a code-first Content Management System (CMS), making it easy to manage content directly in the code while benefiting from automated deployments.
 
-Currently, two official plugins are available:
+## 🚀 Quick Start
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1.  **Clone the repository**.
+2.  **Install dependencies**:
+    ```bash
+    npm install
+    ```
+3.  **Run development server**:
+    ```bash
+    npm run dev
+    ```
+4.  **Build and Deploy**: Push changes to the `main` branch, and the GitHub Actions workflow will automatically build and deploy the site to GitHub Pages.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📸 Media Management (Photos)
 
-## Expanding the ESLint configuration
+To update images on the website:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1.  **Where to put photos**: Place your image files in the `public/` directory (or a subdirectory like `public/images/`).
+2.  **Naming**: Use clean, descriptive names (e.g., `event-2024.jpg`).
+3.  **Referencing**: In your data files, reference the image starting from the root (e.g., `/event-2024.jpg` or `/images/event-2024.jpg`).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 📝 Content Management (Static CMS)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+All website content is managed in the `src/data/` directory. Each file corresponds to a specific part of the site.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 1. `config.ts` (Branding & Navigation)
+- **What's inside**: Foundation name, navigation links, and contact information.
+- **Example**: Update `branding.foundationNameBn` or `navItems`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### 2. `impact.ts` (Impact Stats)
+- **What's inside**: The numbers and labels shown in the Hero and Impact sections.
+- **Example**: Update `impactStats` values like `৫০০০+` or `১২০+`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### 3. `projects.ts` (Activities & Gallery)
+- **What's inside**: Descriptions of your activities and images for the gallery.
+- **Example**: Add a new member to the `activities` array or a new photo to the `gallery`.
+
+### 4. `blog.ts` (Blog Posts)
+- **What's inside**: All blog post content, including headers, excerpts, and full text.
+- **Example**: Add objects to the `blogPosts` array to create new articles.
+
+> [!TIP]
+> Each object in these files usually has two sets of text: `Bn` for Bangla and `En` for English. Make sure to fill out both!
+
+---
+
+## 🎨 Design & Typography
+
+- **English Font**: Inter (Clean, modern sans-serif).
+- **Bangla Font**: Li Ador Noirito (Premium, stylized).
+- **Primary Color**: `#1F7A3E` (Emerald Green).
+- **Layout**: The site uses a "Bento Grid" system with high border-radius (`rounded-[3rem]`) for a flagship feel.
+
+---
+
+## ⚙️ Technical Details
+
+- **Framework**: React 19 + TypeScript + Vite.
+- **Styling**: Tailwind CSS.
+- **Animations**: Framer Motion.
+- **Icons**: Lucide React.
+- **Deployment**: GitHub Actions (`.github/workflows/deploy.yml`).

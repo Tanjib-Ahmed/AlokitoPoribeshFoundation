@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { useCMS } from '../context/CMSContext';
 import * as LucideIcons from 'lucide-react';
 import { useEffect, useState, useRef } from 'react';
+import { impactStats } from '../data/impact';
 
 const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) => {
     const { language } = useLanguage();
@@ -58,62 +58,86 @@ const CountUp = ({ value, duration = 2 }: { value: string; duration?: number }) 
 
 const Impact = () => {
     const { language } = useLanguage();
-    const { state } = useCMS();
 
     return (
-        <section id="impact" className="py-24 bg-primary-950 relative overflow-hidden">
+        <section id="impact" className="py-32 bg-[#050A06] relative overflow-hidden">
             {/* Background Decoration */}
-            <div className="absolute inset-0 opacity-10">
-                <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary-400 rounded-full blur-3xl" />
+            <div className="absolute inset-0 opacity-20">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px]" />
             </div>
 
-            <div className="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
-                <div className="text-center mb-16 px-4">
+            <div className="container mx-auto px-4 md:px-8 relative z-10">
+                <div className="text-center mb-20">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.9 }}
                         whileInView={{ opacity: 1, scale: 1 }}
-                        className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-secondary text-xs font-black uppercase tracking-[0.3em] mb-4"
+                        className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-primary text-xs font-bold uppercase tracking-[0.3em] mb-6 border border-white/10"
                     >
-                        {language === 'bn' ? 'আমাদের অর্জন' : 'Our Impact'}
+                        {language === 'bn' ? 'আমাদের অর্জন' : 'Our Tangible Impact'}
                     </motion.div>
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-5xl font-black text-white font-bangla leading-tight"
+                        className="text-4xl md:text-6xl font-black text-white font-bangla leading-tight max-w-4xl mx-auto"
                     >
-                        {language === 'bn' ? 'আলোকিত আগামীর লক্ষ্যে আমাদের পথচলা' : 'Driving Change for a Brighter Future'}
+                        {language === 'bn' ? 'আলোকিত আগামীর লক্ষ্যে আমাদের পথচলা' : 'Measurable Results That Change Lives'}
                     </motion.h2>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {state.impactStats.map((stat, idx) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {impactStats.map((stat, idx) => {
                         const IconComponent = (LucideIcons as any)[stat.icon] || LucideIcons.Zap;
                         return (
                             <motion.div
                                 key={stat.id}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
+                                initial={{ opacity: 0, y: 20 }}
+                                whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ delay: idx * 0.1 }}
-                                className="group relative p-8 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-500 hover:-translate-y-2"
+                                className="group relative p-10 rounded-[2.5rem] bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-500 flex flex-col items-center text-center"
                             >
-                                <div className="mb-6 w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-secondary group-hover:scale-110 transition-transform duration-500">
+                                <div className="mb-8 w-16 h-16 rounded-2xl bg-primary/20 flex items-center justify-center text-primary group-hover:scale-110 transition-transform duration-500">
                                     <IconComponent className="w-8 h-8" />
                                 </div>
-                                <div className="text-4xl font-black text-white mb-2 font-sans tracking-tight">
+                                <div className="text-5xl font-black text-white mb-3 tracking-tighter">
                                     <CountUp value={stat.value} />
                                 </div>
-                                <div className="text-lg text-white/60 font-medium font-bangla">
+                                <div className="text-lg text-white/50 font-bold uppercase tracking-widest text-sm">
                                     {language === 'bn' ? stat.labelBn : stat.labelEn}
                                 </div>
 
                                 {/* Hover Gradient Effect */}
-                                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-secondary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                                <div className="absolute inset-0 rounded-[2.5rem] bg-gradient-to-br from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                             </motion.div>
                         );
                     })}
                 </div>
+
+                {/* Visual Impact Statement (Carex sub-card pattern) */}
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="mt-20 p-1 bg-gradient-to-r from-primary/30 via-white/10 to-primary/30 rounded-[3rem]"
+                >
+                    <div className="bg-[#050A06] rounded-[2.9rem] p-10 md:p-16 flex flex-col md:flex-row items-center justify-between gap-10">
+                        <div className="max-w-xl text-center md:text-left">
+                            <h3 className="text-3xl md:text-4xl font-black text-white mb-6 font-bangla">
+                                {language === 'bn'
+                                    ? 'একটি সবুজ ও বাসযোগ্য পৃথিবী উপহার দেয়াই আমাদের সংকল্প।'
+                                    : 'Our commitment is to leave a greener planet for the next generation.'}
+                            </h3>
+                            <p className="text-white/60 text-lg">
+                                {language === 'bn'
+                                    ? 'আমরা বিশ্বাস করি প্রতিটি ছোট পদক্ষেপ বড় ইতিবাচক পরিবর্তনের সূচনা করতে পারে।'
+                                    : 'We believe that every small step can trigger a massive wave of positive change.'}
+                            </p>
+                        </div>
+                        <a href="#contact" className="px-10 py-5 bg-primary text-white font-black rounded-full hover:bg-primary-600 transition-all shadow-xl shadow-primary/20 whitespace-nowrap">
+                            {language === 'bn' ? 'আজই যুক্ত হোন' : 'Get Involved Today'}
+                        </a>
+                    </div>
+                </motion.div>
             </div>
         </section>
     );

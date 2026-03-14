@@ -2,23 +2,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
 import { useCMS } from '../context/CMSContext';
-import { Menu, X, Leaf, Globe } from 'lucide-react';
+import { Menu, X, Leaf, Globe, ArrowRight } from 'lucide-react';
+import { navItems, branding } from '../data/config';
 
 const Navbar = () => {
     const { language, toggleLanguage } = useLanguage();
     const { state } = useCMS();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-    const navItems = [
-        { nameBn: 'হোম', nameEn: 'Home', href: '#home' },
-        { nameBn: 'আমাদের সম্পর্কে', nameEn: 'About Us', href: '#about' },
-        { nameBn: 'কার্যক্রম', nameEn: 'Our Work', href: '#work' },
-        { nameBn: 'অর্জিত লক্ষ্য', nameEn: 'Impact', href: '#impact' },
-        { nameBn: 'গ্যালারি', nameEn: 'Gallery', href: '#gallery' },
-        { nameBn: 'ব্লগ', nameEn: 'Blog', href: '#blog' },
-        { nameBn: 'যোগাযোগ', nameEn: 'Contact', href: '#contact' },
-    ];
 
     useEffect(() => {
         const handleScroll = () => {
@@ -30,100 +21,108 @@ const Navbar = () => {
 
     return (
         <nav
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${isScrolled
-                ? 'py-4 bg-white/80 backdrop-blur-2xl shadow-xl shadow-primary/5 border-b border-primary/5'
-                : 'py-6 bg-transparent'
-                }`}
+            className={`fixed top-6 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-50 transition-all duration-500`}
         >
-            <div className="max-w-7xl mx-auto px-4 md:px-8 flex items-center justify-between">
-                {/* Logo */}
+            <div
+                className={`flex items-center justify-between px-6 py-3 rounded-full transition-all duration-500 ${isScrolled
+                        ? 'bg-white/80 backdrop-blur-2xl shadow-2xl shadow-primary/10 border border-white/20'
+                        : 'bg-white/10 backdrop-blur-md border border-white/10'
+                    }`}
+            >
+                {/* Logo Section */}
                 <a href="#home" className="flex items-center gap-3 group">
-                    <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white rotate-3 group-hover:rotate-12 transition-transform duration-500 shadow-lg shadow-primary/20">
-                        <Leaf className="w-7 h-7" />
+                    <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white transition-transform duration-500 group-hover:rotate-12 shadow-lg shadow-primary/20">
+                        <Leaf className="w-5 h-5" />
                     </div>
-                    <div className="hidden sm:block">
-                        <h1 className={`text-xl font-black font-bangla tracking-tight transition-colors duration-500 ${isScrolled ? 'text-dark' : 'text-white'}`}>
-                            {language === 'bn' ? state.branding.nameBn : state.branding.nameEn}
-                        </h1>
-                        <p className={`text-[10px] font-bold uppercase tracking-[0.3em] ${isScrolled ? 'text-primary' : 'text-primary-300'}`}>
-                            {language === 'bn' ? 'পরিবেশের বন্ধু' : 'Friends of Nature'}
-                        </p>
-                    </div>
+                    <span className={`text-lg font-black tracking-tight transition-colors duration-500 ${isScrolled ? 'text-dark' : 'text-white'}`}>
+                        {branding.nameEn.split(' ')[0]} <span className="text-primary">{branding.nameEn.split(' ')[1]}</span>
+                    </span>
                 </a>
 
-                {/* Desktop Nav */}
-                <div className="hidden lg:flex items-center gap-2">
-                    <div className={`flex items-center gap-1 p-1 rounded-2xl ${isScrolled ? 'bg-background' : 'bg-white/10 backdrop-blur-md'}`}>
-                        {navItems.map((item) => (
-                            <a
-                                key={item.href}
-                                href={item.href}
-                                className={`px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all duration-300 ${isScrolled
-                                    ? 'text-dark/60 hover:text-primary hover:bg-white'
-                                    : 'text-white/70 hover:text-white hover:bg-white/10'
-                                    }`}
-                            >
-                                {language === 'bn' ? item.nameBn : item.nameEn}
-                            </a>
-                        ))}
-                    </div>
+                {/* Desktop Menu */}
+                <div className="hidden lg:flex items-center gap-8">
+                    {navItems.map((item) => (
+                        <a
+                            key={item.href}
+                            href={item.href}
+                            className={`text-[13px] font-bold transition-all duration-300 ${isScrolled
+                                    ? 'text-dark/70 hover:text-primary'
+                                    : 'text-white/80 hover:text-white'
+                                }`}
+                        >
+                            {language === 'bn' ? item.nameBn : item.nameEn}
+                        </a>
+                    ))}
+                </div>
 
-                    <div className="w-px h-8 bg-gray-200/20 mx-4" />
-
-                    {/* Language Toggle */}
+                {/* Actions */}
+                <div className="hidden lg:flex items-center gap-3">
                     <button
                         onClick={toggleLanguage}
-                        className={`flex items-center gap-3 px-6 py-3 rounded-2xl font-black uppercase tracking-widest text-[10px] transition-all duration-500 ${isScrolled
-                            ? 'bg-primary text-white shadow-lg shadow-primary/20 hover:bg-primary-dark'
-                            : 'bg-white text-dark hover:bg-primary hover:text-white'
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 ${isScrolled
+                                ? 'text-dark/70 hover:bg-primary/5 hover:text-primary'
+                                : 'text-white/70 hover:bg-white/10 hover:text-white'
                             }`}
                     >
                         <Globe className="w-4 h-4" />
                         {language === 'bn' ? 'English' : 'বাংলা'}
                     </button>
+                    <a
+                        href="#contact"
+                        className="flex items-center gap-2 px-6 py-2.5 bg-primary text-white text-xs font-bold rounded-full hover:bg-primary-600 transition-all shadow-lg shadow-primary/20 group"
+                    >
+                        {language === 'bn' ? 'দান করুন' : 'Donate Now'}
+                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </a>
                 </div>
 
-                {/* Mobile Menu Toggle */}
+                {/* Mobile Toggle */}
                 <button
                     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                    className={`lg:hidden p-3 rounded-2xl transition-all duration-500 ${isScrolled ? 'bg-primary/10 text-primary' : 'bg-white/10 text-white backdrop-blur-md'
+                    className={`lg:hidden p-2 rounded-full transition-all duration-300 ${isScrolled ? 'bg-primary/10 text-primary' : 'bg-white/10 text-white backdrop-blur-md'
                         }`}
                 >
-                    {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
                 </button>
             </div>
 
-            {/* Mobile Menu */}
+            {/* Mobile Menu Overlay */}
             <AnimatePresence>
                 {isMobileMenuOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        className="lg:hidden absolute top-full left-0 w-full bg-white shadow-2xl border-t border-gray-100 p-6 overflow-y-auto max-h-[90vh]"
+                        initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                        className="lg:hidden absolute top-full left-0 right-0 mt-4 bg-white/90 backdrop-blur-2xl rounded-[2rem] shadow-2xl border border-white/20 p-6 flex flex-col gap-2 overflow-hidden z-40"
                     >
-                        <div className="flex flex-col gap-2">
-                            {navItems.map((item) => (
-                                <a
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setIsMobileMenuOpen(false)}
-                                    className="px-6 py-4 rounded-2xl text-sm font-black text-dark/70 hover:text-primary hover:bg-primary/5 transition-all uppercase tracking-widest"
-                                >
-                                    {language === 'bn' ? item.nameBn : item.nameEn}
-                                </a>
-                            ))}
-                            <div className="h-px bg-gray-100 my-4" />
+                        {navItems.map((item) => (
+                            <a
+                                key={item.href}
+                                href={item.href}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="px-6 py-4 rounded-2xl text-sm font-bold text-dark/70 hover:text-primary hover:bg-primary/5 transition-all"
+                            >
+                                {language === 'bn' ? item.nameBn : item.nameEn}
+                            </a>
+                        ))}
+                        <div className="h-px bg-dark/5 my-2" />
+                        <div className="flex flex-col gap-3">
                             <button
                                 onClick={() => {
                                     toggleLanguage();
                                     setIsMobileMenuOpen(false);
                                 }}
-                                className="flex items-center justify-center gap-3 px-6 py-5 bg-primary text-white rounded-2xl font-black uppercase tracking-widest shadow-xl shadow-primary/20"
+                                className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl text-sm font-bold text-dark/70 bg-dark/5"
                             >
                                 <Globe className="w-5 h-5" />
-                                {language === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
+                                {language === 'bn' ? 'Switch to English' : 'বাংলায় দেখুন'}
                             </button>
+                            <a
+                                href="#contact"
+                                className="flex items-center justify-center gap-3 px-6 py-5 bg-primary text-white rounded-2xl font-bold shadow-xl shadow-primary/20"
+                            >
+                                {language === 'bn' ? 'দান করুন' : 'Donate Now'}
+                            </a>
                         </div>
                     </motion.div>
                 )}
