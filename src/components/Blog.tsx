@@ -40,7 +40,7 @@ const Blog = () => {
                             <div className="relative aspect-[16/10] rounded-[2rem] overflow-hidden mb-8 shadow-xl bg-gray-100">
                                 <img
                                     src={post.cover}
-                                    alt={post.title}
+                                    alt={language === 'bn' ? post.titleBn : post.titleEn}
                                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                                 />
                                 <div className="absolute top-6 left-6 px-4 py-2 bg-white/90 backdrop-blur-md rounded-xl shadow-lg flex items-center gap-2">
@@ -50,10 +50,10 @@ const Blog = () => {
                             </div>
 
                             <h3 className="text-2xl font-black text-dark mb-4 font-bangla leading-tight group-hover:text-primary transition-colors">
-                                {post.title}
+                                {language === 'bn' ? post.titleBn : post.titleEn}
                             </h3>
                             <p className="text-dark/60 leading-relaxed font-medium mb-6 line-clamp-3">
-                                {post.excerpt}
+                                {language === 'bn' ? post.excerptBn : post.excerptEn}
                             </p>
 
                             <div className="flex items-center gap-3 text-primary font-bold uppercase tracking-widest text-xs">
@@ -78,7 +78,7 @@ const Blog = () => {
                             <div className="relative h-[25rem] md:h-[35rem]">
                                 <img
                                     src={selectedPost.cover}
-                                    alt={selectedPost.title}
+                                    alt={language === 'bn' ? selectedPost.titleBn : selectedPost.titleEn}
                                     className="w-full h-full object-cover"
                                 />
                                 <button
@@ -107,11 +107,11 @@ const Blog = () => {
                                 </div>
 
                                 <h2 className="text-4xl md:text-6xl font-black text-dark mb-10 leading-tight font-bangla">
-                                    {selectedPost.title}
+                                    {language === 'bn' ? selectedPost.titleBn : selectedPost.titleEn}
                                 </h2>
 
                                 <div className="prose prose-xl max-w-none text-dark/70 font-medium leading-[1.8] font-bangla space-y-8">
-                                    {selectedPost.body.split('\n\n').map((paragraph: string, i: number) => (
+                                    {(language === 'bn' ? selectedPost.bodyBn : selectedPost.bodyEn).split('\n\n').map((paragraph: string, i: number) => (
                                         <p key={i}>{paragraph}</p>
                                     ))}
                                 </div>

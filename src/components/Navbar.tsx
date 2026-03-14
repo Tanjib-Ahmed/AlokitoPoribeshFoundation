@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLanguage } from '../context/LanguageContext';
-import { useCMS } from '../context/CMSContext';
 import { Menu, X, Leaf, Globe, ArrowRight } from 'lucide-react';
 import { navItems, branding } from '../data/config';
 
 const Navbar = () => {
     const { language, toggleLanguage } = useLanguage();
-    const { state } = useCMS();
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -25,8 +23,8 @@ const Navbar = () => {
         >
             <div
                 className={`flex items-center justify-between px-6 py-3 rounded-full transition-all duration-500 ${isScrolled
-                        ? 'bg-white/80 backdrop-blur-2xl shadow-2xl shadow-primary/10 border border-white/20'
-                        : 'bg-white/10 backdrop-blur-md border border-white/10'
+                    ? 'bg-white/80 backdrop-blur-2xl shadow-2xl shadow-primary/10 border border-white/20'
+                    : 'bg-white/10 backdrop-blur-md border border-white/10'
                     }`}
             >
                 {/* Logo Section */}
@@ -46,8 +44,8 @@ const Navbar = () => {
                             key={item.href}
                             href={item.href}
                             className={`text-[13px] font-bold transition-all duration-300 ${isScrolled
-                                    ? 'text-dark/70 hover:text-primary'
-                                    : 'text-white/80 hover:text-white'
+                                ? 'text-dark/70 hover:text-primary'
+                                : 'text-white/80 hover:text-white'
                                 }`}
                         >
                             {language === 'bn' ? item.nameBn : item.nameEn}
@@ -60,8 +58,8 @@ const Navbar = () => {
                     <button
                         onClick={toggleLanguage}
                         className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all duration-300 ${isScrolled
-                                ? 'text-dark/70 hover:bg-primary/5 hover:text-primary'
-                                : 'text-white/70 hover:bg-white/10 hover:text-white'
+                            ? 'text-dark/70 hover:bg-primary/5 hover:text-primary'
+                            : 'text-white/70 hover:bg-white/10 hover:text-white'
                             }`}
                     >
                         <Globe className="w-4 h-4" />

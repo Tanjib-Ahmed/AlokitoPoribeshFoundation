@@ -1,4 +1,5 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, { createContext, useContext } from 'react';
+import type { ReactNode } from 'react';
 import { branding, about, contact } from '../data/config';
 import { impactStats } from '../data/impact';
 import { activities, gallery } from '../data/projects';
